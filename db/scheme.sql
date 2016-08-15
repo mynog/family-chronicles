@@ -8,19 +8,34 @@ DROP SCHEMA IF EXISTS public CASCADE;
 -- -----------------------------------------------------
 CREATE SCHEMA IF NOT EXISTS public;
 
+
+-- -----------------------------------------------------
+-- Create hibernate_sequence
+-- -----------------------------------------------------
+
+DROP SEQUENCE IF EXISTS hibernate_sequence;
+CREATE SEQUENCE hibernate_sequence
+INCREMENT 1
+MINVALUE 1
+MAXVALUE 9223372036854775807
+START 20
+CACHE 10000;
+ALTER TABLE hibernate_sequence
+OWNER TO family_chronicle;
+
 -- -----------------------------------------------------
 -- Table family_chronicle.people
 -- -----------------------------------------------------
 
 CREATE TABLE IF NOT EXISTS people (
-  id         BIGINT                   NOT NULL,
+  id         BIGINT                   NOT NULL DEFAULT nextval('hibernate_sequence'),
   firstname  VARCHAR(45)              NULL,
   lastname   VARCHAR(45)              NULL,
   birthday   TIMESTAMP WITH TIME ZONE NULL,
-  male       BOOLEAN                  NULL DEFAULT TRUE,
+  male       BOOLEAN                  NULL     DEFAULT TRUE,
   father_id  BIGINT                   NULL,
   mother_id  BIGINT                   NULL,
-  alive      BOOLEAN                  NULL DEFAULT TRUE,
+  alive      BOOLEAN                  NULL     DEFAULT TRUE,
   death_date TIMESTAMP WITH TIME ZONE NULL,
   PRIMARY KEY (id)
   ,
@@ -45,7 +60,7 @@ CREATE INDEX fk_people_mother_idx ON people (mother_id ASC);
 -- -----------------------------------------------------
 
 CREATE TABLE IF NOT EXISTS account (
-  id        BIGINT       NOT NULL,
+  id        BIGINT       NOT NULL DEFAULT nextval('hibernate_sequence'),
   email     VARCHAR(254) NOT NULL,
   people_id BIGINT       NULL,
   PRIMARY KEY (id)
@@ -66,7 +81,7 @@ CREATE INDEX fk_account_people_idx ON account (people_id ASC);
 -- -----------------------------------------------------
 
 CREATE TABLE IF NOT EXISTS role (
-  id   BIGINT      NOT NULL,
+  id   BIGINT      NOT NULL DEFAULT nextval('hibernate_sequence'),
   name VARCHAR(45) NOT NULL,
   PRIMARY KEY (id),
   CONSTRAINT role_name_UNIQUE UNIQUE (name)
@@ -104,10 +119,10 @@ CREATE INDEX fk_role_has_account_role_idx ON role_has_account (role_id ASC);
 -- -----------------------------------------------------
 
 CREATE TABLE IF NOT EXISTS credential (
-  id                            BIGINT                   NOT NULL,
+  id                            BIGINT                   NOT NULL DEFAULT nextval('hibernate_sequence'),
   username                      VARCHAR(256)             NULL,
   password                      VARCHAR(256)             NOT NULL,
-  create_date                   TIMESTAMP WITH TIME ZONE NOT NULL,
+  create_date                   TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT current_timestamp,
   last_password_change_date     TIMESTAMP WITH TIME ZONE NULL,
   failed_password_attempt_count INT                      NULL,
   locked_out                    BOOLEAN                  NOT NULL DEFAULT FALSE,
@@ -129,7 +144,7 @@ CREATE INDEX fk_credential_account_idx ON credential (account_id ASC);
 -- -----------------------------------------------------
 
 CREATE TABLE IF NOT EXISTS name_type (
-  id   BIGINT      NOT NULL,
+  id   BIGINT      NOT NULL DEFAULT nextval('hibernate_sequence'),
   type VARCHAR(45) NOT NULL,
   PRIMARY KEY (id),
   CONSTRAINT name_type_UNIQUE UNIQUE (type)
@@ -141,7 +156,7 @@ CREATE TABLE IF NOT EXISTS name_type (
 -- -----------------------------------------------------
 
 CREATE TABLE IF NOT EXISTS people_name (
-  id           BIGINT      NOT NULL,
+  id           BIGINT      NOT NULL DEFAULT nextval('hibernate_sequence'),
   name         VARCHAR(45) NULL,
   name_type_id BIGINT      NOT NULL,
   people_id    BIGINT      NOT NULL,
@@ -168,7 +183,7 @@ CREATE INDEX fk_people_name_people_idx ON people_name (people_id ASC);
 -- -----------------------------------------------------
 
 CREATE TABLE IF NOT EXISTS social_network (
-  id          BIGINT        NOT NULL,
+  id          BIGINT        NOT NULL DEFAULT nextval('hibernate_sequence'),
   name        VARCHAR(45)   NOT NULL,
   url         VARCHAR(1024) NULL,
   description VARCHAR(1024) NULL,
@@ -181,7 +196,7 @@ CREATE TABLE IF NOT EXISTS social_network (
 -- -----------------------------------------------------
 
 CREATE TABLE IF NOT EXISTS relation_type (
-  id   BIGINT      NOT NULL,
+  id   BIGINT      NOT NULL DEFAULT nextval('hibernate_sequence'),
   type VARCHAR(45) NULL,
   PRIMARY KEY (id)
 );
@@ -192,7 +207,7 @@ CREATE TABLE IF NOT EXISTS relation_type (
 -- -----------------------------------------------------
 
 CREATE TABLE IF NOT EXISTS people_relation (
-  id               BIGINT NOT NULL,
+  id               BIGINT NOT NULL DEFAULT nextval('hibernate_sequence'),
   relation_type_id BIGINT NOT NULL,
   PRIMARY KEY (id)
   ,
@@ -236,7 +251,7 @@ CREATE INDEX fk_people_has_people_relation_people_idx ON people_has_people_relat
 -- -----------------------------------------------------
 
 CREATE TABLE IF NOT EXISTS chat (
-  id BIGINT NOT NULL,
+  id BIGINT NOT NULL DEFAULT nextval('hibernate_sequence'),
   PRIMARY KEY (id)
 );
 
@@ -246,9 +261,9 @@ CREATE TABLE IF NOT EXISTS chat (
 -- -----------------------------------------------------
 
 CREATE TABLE IF NOT EXISTS message (
-  id          BIGINT                   NOT NULL,
+  id          BIGINT                   NOT NULL DEFAULT nextval('hibernate_sequence'),
   text        VARCHAR(1024)            NOT NULL,
-  create_date TIMESTAMP WITH TIME ZONE NOT NULL,
+  create_date TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT current_timestamp,
   chat_id     BIGINT                   NOT NULL,
   PRIMARY KEY (id)
   ,
@@ -317,8 +332,8 @@ CREATE INDEX fk_social_network_has_people_social_network_idx ON social_network_h
 -- -----------------------------------------------------
 
 CREATE TABLE IF NOT EXISTS note (
-  id          BIGINT                   NOT NULL,
-  date_create TIMESTAMP WITH TIME ZONE NOT NULL,
+  id          BIGINT                   NOT NULL DEFAULT nextval('hibernate_sequence'),
+  date_create TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT current_timestamp,
   text        VARCHAR(1024)            NOT NULL,
   people_id   BIGINT                   NOT NULL,
   PRIMARY KEY (id)
@@ -363,7 +378,7 @@ CREATE INDEX fk_account_has_account_friend_idx ON friend (friend_id ASC);
 -- -----------------------------------------------------
 
 CREATE TABLE IF NOT EXISTS attribute (
-  id                 BIGINT        NOT NULL,
+  id                 BIGINT        NOT NULL DEFAULT nextval('hibernate_sequence'),
   name               VARCHAR(45)   NOT NULL,
   description        VARCHAR(1024) NULL,
   attribute_type_id  BIGINT        NOT NULL,
@@ -398,7 +413,7 @@ CREATE INDEX fk_attribute_attribute_group_idx ON attribute (attribute_group_id A
 -- -----------------------------------------------------
 
 CREATE TABLE IF NOT EXISTS field_type (
-  id   BIGINT      NOT NULL,
+  id   BIGINT      NOT NULL DEFAULT nextval('hibernate_sequence'),
   name VARCHAR(45) NOT NULL,
   PRIMARY KEY (id),
   CONSTRAINT field_type_name_UNIQUE UNIQUE (name)
@@ -410,7 +425,7 @@ CREATE TABLE IF NOT EXISTS field_type (
 -- -----------------------------------------------------
 
 CREATE TABLE IF NOT EXISTS attribute_type (
-  id            BIGINT        NOT NULL,
+  id            BIGINT        NOT NULL DEFAULT nextval('hibernate_sequence'),
   name          VARCHAR(45)   NOT NULL,
   regex         VARCHAR(1024) NULL,
   required      BOOLEAN       NOT NULL DEFAULT FALSE,
@@ -435,7 +450,7 @@ CREATE INDEX fk_attribute_type_field_type_idx ON attribute_type (field_type_id A
 -- -----------------------------------------------------
 
 CREATE TABLE IF NOT EXISTS attribute_list (
-  id          BIGINT        NOT NULL,
+  id          BIGINT        NOT NULL DEFAULT nextval('hibernate_sequence'),
   name        VARCHAR(45)   NOT NULL,
   description VARCHAR(1024) NULL,
   PRIMARY KEY (id)
@@ -447,7 +462,7 @@ CREATE TABLE IF NOT EXISTS attribute_list (
 -- -----------------------------------------------------
 
 CREATE TABLE IF NOT EXISTS attribute_group (
-  id          BIGINT        NOT NULL,
+  id          BIGINT        NOT NULL DEFAULT nextval('hibernate_sequence'),
   name        VARCHAR(45)   NOT NULL,
   description VARCHAR(1024) NULL,
   PRIMARY KEY (id),
@@ -460,7 +475,7 @@ CREATE TABLE IF NOT EXISTS attribute_group (
 -- -----------------------------------------------------
 
 CREATE TABLE IF NOT EXISTS attribute (
-  id                 BIGINT        NOT NULL,
+  id                 BIGINT        NOT NULL DEFAULT nextval('hibernate_sequence'),
   name               VARCHAR(45)   NOT NULL,
   description        VARCHAR(1024) NULL,
   attribute_type_id  BIGINT        NOT NULL,
@@ -495,7 +510,7 @@ CREATE INDEX fk_attribute_attribute_group_idx ON attribute (attribute_group_id A
 -- -----------------------------------------------------
 
 CREATE TABLE IF NOT EXISTS attribute_list_value (
-  id                BIGINT       NOT NULL,
+  id                BIGINT       NOT NULL DEFAULT nextval('hibernate_sequence'),
   value             VARCHAR(256) NOT NULL,
   attribute_list_id BIGINT       NOT NULL,
   PRIMARY KEY (id)
@@ -514,7 +529,7 @@ CREATE INDEX fk_attribute_list_value_attribute_list_idx ON attribute_list_value 
 -- Table family_chronicle.event_type
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS event_type (
-  id   BIGINT       NOT NULL,
+  id   BIGINT       NOT NULL DEFAULT nextval('hibernate_sequence'),
   type VARCHAR(254) NOT NULL,
   PRIMARY KEY (id),
   CONSTRAINT event_type_type_UNIQUE UNIQUE (type)
@@ -525,7 +540,7 @@ CREATE TABLE IF NOT EXISTS event_type (
 -- Table family_chronicle.event
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS event (
-  id            BIGINT       NOT NULL,
+  id            BIGINT       NOT NULL DEFAULT nextval('hibernate_sequence'),
   name          VARCHAR(254) NOT NULL,
   event_type_id INT          NOT NULL,
   PRIMARY KEY (id)
@@ -569,7 +584,7 @@ CREATE INDEX fk_event_has_people_event_idx ON event_has_people (event_id ASC);
 -- -----------------------------------------------------
 
 CREATE TABLE IF NOT EXISTS attribute_value (
-  id                      BIGINT                   NOT NULL,
+  id                      BIGINT                   NOT NULL DEFAULT nextval('hibernate_sequence'),
   text_value              VARCHAR(1024)            NULL,
   date_value              TIMESTAMP WITH TIME ZONE NULL,
   blob_value              BYTEA                    NULL,
