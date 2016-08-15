@@ -9,7 +9,7 @@ DROP SCHEMA IF EXISTS public CASCADE;
 CREATE SCHEMA IF NOT EXISTS public;
 
 -- -----------------------------------------------------
--- Table `family_chronicle`.`people`
+-- Table family_chronicle.people
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS people CASCADE;
 
@@ -42,7 +42,7 @@ CREATE INDEX fk_people_mother_idx ON people (mother_id ASC);
 
 
 -- -----------------------------------------------------
--- Table `family_chronicle`.`account`
+-- Table family_chronicle.account
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS account CASCADE;
 
@@ -64,7 +64,7 @@ CREATE INDEX fk_account_people_idx ON account (people_id ASC);
 
 
 -- -----------------------------------------------------
--- Table `family_chronicle`.`role`
+-- Table family_chronicle.role
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS role CASCADE;
 
@@ -77,7 +77,7 @@ CREATE TABLE IF NOT EXISTS role (
 
 
 -- -----------------------------------------------------
--- Table `family_chronicle`.`role_has_account`
+-- Table family_chronicle.role_has_account
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS role_has_account CASCADE;
 
@@ -104,7 +104,7 @@ CREATE INDEX fk_role_has_account_role_idx ON role_has_account (role_id ASC);
 
 
 -- -----------------------------------------------------
--- Table `family_chronicle`.`credential`
+-- Table family_chronicle.credential
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS credential CASCADE;
 
@@ -130,7 +130,7 @@ CREATE INDEX fk_credential_account_idx ON credential (account_id ASC);
 
 
 -- -----------------------------------------------------
--- Table `family_chronicle`.`name_type`
+-- Table family_chronicle.name_type
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS name_type CASCADE;
 
@@ -143,7 +143,7 @@ CREATE TABLE IF NOT EXISTS name_type (
 
 
 -- -----------------------------------------------------
--- Table `family_chronicle`.`people_name`
+-- Table family_chronicle.people_name
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS people_name CASCADE;
 
@@ -171,7 +171,7 @@ CREATE INDEX fk_people_name_people_idx ON people_name (people_id ASC);
 
 
 -- -----------------------------------------------------
--- Table `family_chronicle`.`social_network`
+-- Table family_chronicle.social_network
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS social_network CASCADE;
 
@@ -185,7 +185,7 @@ CREATE TABLE IF NOT EXISTS social_network (
 
 
 -- -----------------------------------------------------
--- Table `family_chronicle`.`relation_type`
+-- Table family_chronicle.relation_type
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS relation_type CASCADE;
 
@@ -197,7 +197,7 @@ CREATE TABLE IF NOT EXISTS relation_type (
 
 
 -- -----------------------------------------------------
--- Table `family_chronicle`.`people_relation`
+-- Table family_chronicle.people_relation
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS people_relation CASCADE;
 
@@ -217,7 +217,7 @@ CREATE INDEX fk_people_relation_relation_type_idx ON people_relation (relation_t
 
 
 -- -----------------------------------------------------
--- Table `family_chronicle`.`people_has_people_relation`
+-- Table family_chronicle.people_has_people_relation
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS people_has_people_relation CASCADE;
 
@@ -243,7 +243,7 @@ CREATE INDEX fk_people_has_people_relation_people_idx ON people_has_people_relat
 
 
 -- -----------------------------------------------------
--- Table `family_chronicle`.`chat`
+-- Table family_chronicle.chat
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS chat CASCADE;
 
@@ -254,7 +254,7 @@ CREATE TABLE IF NOT EXISTS chat (
 
 
 -- -----------------------------------------------------
--- Table `family_chronicle`.`message`
+-- Table family_chronicle.message
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS message CASCADE;
 
@@ -276,7 +276,7 @@ CREATE INDEX fk_message_chat_idx ON message (chat_id ASC);
 
 
 -- -----------------------------------------------------
--- Table `family_chronicle`.`people_has_chat`
+-- Table family_chronicle.people_has_chat
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS people_has_chat CASCADE;
 
@@ -302,7 +302,7 @@ CREATE INDEX fk_people_has_chat_people_idx ON people_has_chat (people_id ASC);
 
 
 -- -----------------------------------------------------
--- Table `family_chronicle`.`social_network_has_people`
+-- Table family_chronicle.social_network_has_people
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS social_network_has_people CASCADE;
 
@@ -328,7 +328,7 @@ CREATE INDEX fk_social_network_has_people_social_network_idx ON social_network_h
 
 
 -- -----------------------------------------------------
--- Table `family_chronicle`.`note`
+-- Table family_chronicle.note
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS note CASCADE;
 
@@ -350,7 +350,7 @@ CREATE INDEX fk_note_people_idx ON note (people_id ASC);
 
 
 -- -----------------------------------------------------
--- Table `family_chronicle`.`friend`
+-- Table family_chronicle.friend
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS friend CASCADE;
 
@@ -376,7 +376,7 @@ CREATE INDEX fk_account_has_account_friend_idx ON friend (friend_id ASC);
 
 
 -- -----------------------------------------------------
--- Table `family_chronicle`.`attribute`
+-- Table family_chronicle.attribute
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS attribute CASCADE;
 
@@ -412,7 +412,7 @@ CREATE INDEX fk_attribute_attribute_group_idx ON attribute (attribute_group_id A
 
 
 -- -----------------------------------------------------
--- Table `family_chronicle`.`field_type`
+-- Table family_chronicle.field_type
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS field_type CASCADE;
 
@@ -425,7 +425,7 @@ CREATE TABLE IF NOT EXISTS field_type (
 
 
 -- -----------------------------------------------------
--- Table `family_chronicle`.`attribute_type`
+-- Table family_chronicle.attribute_type
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS attribute_type CASCADE;
 
@@ -451,7 +451,7 @@ CREATE INDEX fk_attribute_type_field_type_idx ON attribute_type (field_type_id A
 
 
 -- -----------------------------------------------------
--- Table `family_chronicle`.`attribute_list`
+-- Table family_chronicle.attribute_list
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS attribute_list CASCADE;
 
@@ -464,7 +464,7 @@ CREATE TABLE IF NOT EXISTS attribute_list (
 
 
 -- -----------------------------------------------------
--- Table `family_chronicle`.`attribute_group`
+-- Table family_chronicle.attribute_group
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS attribute_group CASCADE;
 
@@ -473,12 +473,12 @@ CREATE TABLE IF NOT EXISTS attribute_group (
   name        VARCHAR(45)   NOT NULL,
   description VARCHAR(1024) NULL,
   PRIMARY KEY (id),
-  CONSTRAINT name_UNIQUE UNIQUE (name)
+  CONSTRAINT attribute_group_name_UNIQUE UNIQUE (name)
 );
 
 
 -- -----------------------------------------------------
--- Table `family_chronicle`.`attribute`
+-- Table family_chronicle.attribute
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS attribute CASCADE;
 
@@ -514,7 +514,7 @@ CREATE INDEX fk_attribute_attribute_group_idx ON attribute (attribute_group_id A
 
 
 -- -----------------------------------------------------
--- Table `family_chronicle`.`attribute_list_value`
+-- Table family_chronicle.attribute_list_value
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS attribute_list_value CASCADE;
 
@@ -535,7 +535,61 @@ CREATE INDEX fk_attribute_list_value_attribute_list_idx ON attribute_list_value 
 
 
 -- -----------------------------------------------------
--- Table `family_chronicle`.`attribute_value`
+-- Table family_chronicle.event_type
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS event_type (
+  id   BIGINT       NOT NULL,
+  type VARCHAR(254) NOT NULL,
+  PRIMARY KEY (id),
+  CONSTRAINT event_type_type_UNIQUE UNIQUE (type)
+);
+
+
+-- -----------------------------------------------------
+-- Table family_chronicle.event
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS event (
+  id            BIGINT       NOT NULL,
+  name          VARCHAR(254) NOT NULL,
+  event_type_id INT          NOT NULL,
+  PRIMARY KEY (id)
+  ,
+  CONSTRAINT fk_event_event_type
+  FOREIGN KEY (event_type_id)
+  REFERENCES event_type (id)
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION
+);
+
+CREATE INDEX fk_event_event_type_idx ON event (event_type_id ASC);
+
+
+-- -----------------------------------------------------
+-- Table family_chronicle.event_has_people
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS event_has_people (
+  event_id  BIGINT NOT NULL,
+  people_id BIGINT NOT NULL,
+  PRIMARY KEY (event_id, people_id)
+  ,
+  CONSTRAINT fk_event_has_people_event
+  FOREIGN KEY (event_id)
+  REFERENCES event (id)
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION,
+  CONSTRAINT fk_event_has_people_people
+  FOREIGN KEY (people_id)
+  REFERENCES people (id)
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION
+);
+
+CREATE INDEX fk_event_has_people_people_idx ON event_has_people (people_id ASC);
+CREATE INDEX fk_event_has_people_event_idx ON event_has_people (event_id ASC);
+
+
+-- -----------------------------------------------------
+-- Table family_chronicle.attribute_value
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS attribute_value CASCADE;
 
@@ -545,7 +599,8 @@ CREATE TABLE IF NOT EXISTS attribute_value (
   date_value              TIMESTAMP WITH TIME ZONE NULL,
   blob_value              BYTEA                    NULL,
   attribute_list_value_id BIGINT                   NOT NULL,
-  people_id               BIGINT                   NOT NULL,
+  people_id               BIGINT                   NULL,
+  event_id                BIGINT                   NULL,
   attribute_id            BIGINT                   NOT NULL,
   PRIMARY KEY (id)
   ,
@@ -563,9 +618,16 @@ CREATE TABLE IF NOT EXISTS attribute_value (
   FOREIGN KEY (attribute_list_value_id)
   REFERENCES attribute_list_value (id)
   ON DELETE RESTRICT
+  ON UPDATE CASCADE,
+  CONSTRAINT fk_attribute_value_event1
+  FOREIGN KEY (event_id)
+  REFERENCES event (id)
+  ON DELETE RESTRICT
   ON UPDATE CASCADE
+
 );
 
 CREATE INDEX fk_attribute_value_people_idx ON attribute_value (people_id ASC);
 CREATE INDEX fk_attribute_value_attribute_idx ON attribute_value (attribute_id ASC);
 CREATE INDEX fk_attribute_value_attribute_list_value_idx ON attribute_value (attribute_list_value_id ASC);
+CREATE INDEX fk_attribute_value_event_idx ON attribute_value (event_id ASC);
