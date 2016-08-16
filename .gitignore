@@ -13,7 +13,7 @@
 *.ear
 
 # tmp files
-.bak
+*.bak
 
 # Vagrant VM local settings
 .vagrant/
