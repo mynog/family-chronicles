@@ -1,0 +1,79 @@
+- hosts: all
+  gather_facts: no
+  tasks:
+  - name: Update cache
+    apt: update_cache=yes
+    become: yes
+  - name: Install packages
+    apt: name={{item}}
+    with_items:
+      - postgresql
+      - python-psycopg2
+      - default-jre
+      - default-jdk
+      - maven
+    become: yes
+
+- hosts: all
+  sudo: yes
+  sudo_user: postgres
+  gather_facts: no
+  vars:
+    dbname: family_chronicles
+    dbuser: family_chronicles
+    dbpassword: passwd
+    port: 5432
+  tasks:
+  - name: Copy Postgres config (1 / 2)
+    copy: src=/vagrant/cm/postgresql_configuration/postgresql.conf dest=/etc/postgresql/9.3/main/postgresql.conf owner=postgres group=postgres
+    become: yes
+  - name: Copy Postgres config (2 / 2)
+    copy: src=/vagrant/cm/postgresql_configuration/pg_hba.conf dest=/etc/postgresql/9.3/main/pg_hba.conf owner=postgres group=postgres
+    become: yes
+  - name: Restart Postgres service
+    service: name=postgresql state=restarted
+  - name: Drop database
+    postgresql_db: name={{dbname}} port={{port}} state=absent
+    become: yes
+  - name: Create database
+    postgresql_db: name={{dbname}} port={{port}}
+    become: yes
+  - name: Ensure user has access to database
+    postgresql_user: db={{dbname}} name={{dbuser}} password={{dbpassword}} priv=ALL port={{port}}
+  - name: Set psql user as superuser
+    postgresql_user: name={{dbuser}} role_attr_flags=SUPERUSER port={{port}}
+  - name: Restart Postgres service
+    service: name=postgresql state=restarted
+    become: yes
+  - name: Build database schema
+    shell: "psql -d {{dbname}} -a -f /vagrant/db/scheme.sql"
+    become: yes
+  # - name: Database add test data 
+    # shell: "psql -d {{dbname}} -a -f /vagrant/db/data.sql"
+    # become: yes
+  - name: Start Postgresql on boot
+    shell: "update-rc.d postgresql defaults"
+    become: yes
+
+- hosts: all
+  user: root
+  tasks:
+  - name: Add Tomcat user
+    user: name=tomcat
+    become: yes
+  - name: Download Tomcat
+    get_url: url=http://apache-mirror.rbc.ru/pub/apache/tomcat/tomcat-8/v8.5.4/bin/apache-tomcat-8.5.4.tar.gz dest=/opt
+    become: yes
+  - name: Extract Tomcat archive
+    shell: tar xf /opt/apache-tomcat-8.5.4.tar.gz -C /opt
+    become: yes
+  - name: Create /opt/tomcat symlink
+    file: src=/opt/apache-tomcat-8.5.4 dest=/opt/tomcat owner=tomcat
+     state=link
+    become: yes
+  #
+  # todo: add app deploy
+  #
+  - name: Start Tomcat
+    shell: /opt/tomcat/bin/startup.sh
+    become: yes
