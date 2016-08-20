@@ -374,41 +374,6 @@ CREATE INDEX fk_account_has_account_friend_idx ON friend (friend_id ASC);
 
 
 -- -----------------------------------------------------
--- Table family_chronicle.attribute
--- -----------------------------------------------------
-
-CREATE TABLE IF NOT EXISTS attribute (
-  id                 BIGINT        NOT NULL DEFAULT nextval('hibernate_sequence'),
-  name               VARCHAR(45)   NOT NULL,
-  description        VARCHAR(1024) NULL,
-  attribute_type_id  BIGINT        NOT NULL,
-  attribute_list_id  BIGINT        NOT NULL,
-  attribute_group_id BIGINT        NOT NULL,
-  PRIMARY KEY (id)
-  ,
-  CONSTRAINT fk_attribute_attribute_type
-  FOREIGN KEY (attribute_type_id)
-  REFERENCES attribute_type (id)
-  ON DELETE RESTRICT
-  ON UPDATE CASCADE,
-  CONSTRAINT fk_attribute_attribute_list
-  FOREIGN KEY (attribute_list_id)
-  REFERENCES attribute_list (id)
-  ON DELETE RESTRICT
-  ON UPDATE CASCADE,
-  CONSTRAINT fk_attribute_attribute_group
-  FOREIGN KEY (attribute_group_id)
-  REFERENCES attribute_group (id)
-  ON DELETE RESTRICT
-  ON UPDATE CASCADE
-);
-
-CREATE INDEX fk_attribute_attribute_type_idx ON attribute (attribute_type_id ASC);
-CREATE INDEX fk_attribute_attribute_list_idx ON attribute (attribute_list_id ASC);
-CREATE INDEX fk_attribute_attribute_group_idx ON attribute (attribute_group_id ASC);
-
-
--- -----------------------------------------------------
 -- Table family_chronicle.field_type
 -- -----------------------------------------------------
 
@@ -423,7 +388,6 @@ CREATE TABLE IF NOT EXISTS field_type (
 -- -----------------------------------------------------
 -- Table family_chronicle.attribute_type
 -- -----------------------------------------------------
-
 CREATE TABLE IF NOT EXISTS attribute_type (
   id            BIGINT        NOT NULL DEFAULT nextval('hibernate_sequence'),
   name          VARCHAR(45)   NOT NULL,
@@ -609,7 +573,7 @@ CREATE TABLE IF NOT EXISTS attribute_value (
   REFERENCES attribute_list_value (id)
   ON DELETE RESTRICT
   ON UPDATE CASCADE,
-  CONSTRAINT fk_attribute_value_event1
+  CONSTRAINT fk_attribute_value_event
   FOREIGN KEY (event_id)
   REFERENCES event (id)
   ON DELETE RESTRICT
