@@ -62,13 +62,13 @@
     user: name=tomcat
     become: yes
   - name: Download Tomcat
-    get_url: url=http://apache-mirror.rbc.ru/pub/apache/tomcat/tomcat-8/v8.5.4/bin/apache-tomcat-8.5.4.tar.gz dest=/opt
+    get_url: url=http://www-eu.apache.org/dist/tomcat/tomcat-8/v8.5.11/bin/apache-tomcat-8.5.11.tar.gz dest=/opt
     become: yes
   - name: Extract Tomcat archive
-    shell: tar xf /opt/apache-tomcat-8.5.4.tar.gz -C /opt
+    shell: tar xf /opt/apache-tomcat-8.5.11.tar.gz -C /opt
     become: yes
   - name: Create /opt/tomcat symlink
-    file: src=/opt/apache-tomcat-8.5.4 dest=/opt/tomcat owner=tomcat
+    file: src=/opt/apache-tomcat-8.5.11 dest=/opt/tomcat owner=tomcat
      state=link
     become: yes
   #

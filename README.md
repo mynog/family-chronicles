@@ -18,4 +18,4 @@ Prerequisites
 -------------
 
 - JDK 8
-- Maven 3
+- Gradle
